@@ -1,0 +1,35 @@
+@import "src/assets/styles/Colors";
+
+.TreeView {
+  list-style-type: none;
+  //margin: 0;
+  //padding: 0;
+}
+
+.Caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+}
+
+.Caret::before {
+  position: relative;
+  content: "\25B6";
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.CaretDown::before {
+  transform: rotate(90deg);
+}
+
+.Nested {
+  display: none;
+}
+
+.Active {
+  display: block;
+}
+
+.Info {
+  float:right
+}

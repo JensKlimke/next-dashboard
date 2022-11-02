@@ -1,0 +1,23 @@
+.profileContainer {
+    position: relative;
+}
+
+.blankLine {
+    height: calc(var(--avatar-size) / 2);
+}
+
+.avatar {
+    position: absolute;
+    top: calc(var(--avatar-size) * -1 + 0.5em);
+    left: calc(var(--avatar-size) / -2);
+    margin-left: 50%;
+    border-radius: 50%;
+    border: 3px solid var(--avatar-border-color);
+    object-fit: cover;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+}
+
+.profileContainer button[type=submit] {
+    width: 6em;
+}
