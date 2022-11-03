@@ -1,35 +1,34 @@
-import {Button, Form} from "react-bootstrap";
-import React, {useState} from "react";
-import {useAuth} from "auth/contexts/auth";
+import {Alert, Button, Form} from "react-bootstrap";
+import React, {useCallback, useState} from "react";
+import {SignInCallbackType} from "auth/types/auth";
 
-
-export default function LoginForm() {
+export default function SignInForm({signIn} : {signIn : SignInCallbackType}) {
   // states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  // hooks
-  const auth = useAuth();
-  // callbacks
-  const login = (event : React.FormEvent<HTMLFormElement>) => {
+  const [message, setMessage] = useState<string>();
+  // callback
+  const signInLocal = useCallback((event : React.FormEvent<HTMLFormElement>) => {
     // prevent default
     event.preventDefault();
-    // loading
+    // set loading
     setLoading(true);
-    // login
-    auth.login && auth.login(email, password)
-        .then(() => setLoading(false))
-        .catch(e => console.error(e))
-  }
+    // sign in
+    signIn(email, password)
+      .catch(e => e.message && setMessage(e.message))
+      .then(() => setLoading(false));
+  }, [signIn, email, password]);
   // render
   return (
-    <Form onSubmit={login}>
+    <Form onSubmit={signInLocal}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Control onChange={(e) => setEmail(e.target.value)} value={email} type="email" placeholder="Email address" />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Control onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder="Password" />
       </Form.Group>
+      { message && <Alert variant='warning' onClose={() => setMessage(undefined)} dismissible>{message}</Alert> }
       <div className="d-grid gap-2">
         <Button disabled={loading} variant="primary" type="submit">
           Login

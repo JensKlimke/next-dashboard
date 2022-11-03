@@ -6,12 +6,12 @@ import NavElement from "dashboard/elements/components/NavElement";
 import Link from "next/link";
 import {Avatar} from "dashboard/elements/profile/Avatar";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFaceMeh, faRightFromBracket, faUser, faUserSecret} from "@fortawesome/free-solid-svg-icons";
+import {faRightFromBracket, faUser} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
 export default function UserMenu () {
   // get contexts
-  const {user, logout} = useAuth();
+  const {user, signOut} = useAuth();
   const routes = useRoutes();
   const config = useConfig();
   // render
@@ -29,7 +29,7 @@ export default function UserMenu () {
             </Link>
           )
         }
-        <NavLink onClick={logout}>
+        <NavLink onClick={signOut}>
           Logout
         </NavLink>
       </Nav>
@@ -47,7 +47,7 @@ export default function UserMenu () {
               </Link>
             )
           }
-          <NavDropdown.Item eventKey='logout' onClick={logout}>
+          <NavDropdown.Item eventKey='logout' onClick={signOut}>
             <span className='navIcon'><FontAwesomeIcon icon={faRightFromBracket}/></span>
             Logout
           </NavDropdown.Item>

@@ -1,6 +1,6 @@
 import {Auth, Storage} from 'aws-amplify';
 
-export async function saveAvatar(file: File) {
+export async function saveAmplifyAvatar(file: File) {
   // get user
   const user = await Auth.currentAuthenticatedUser();
   // check file type
@@ -20,7 +20,7 @@ export async function saveAvatar(file: File) {
   }
   // write to storage
   const filename = user.attributes.sub + '.' + extension;
-  Storage.put(filename, file, {
+  Storage.put(`avatars/${filename}`, file, {
     contentType: file.type
   })
     .then(result => {
@@ -41,8 +41,7 @@ export async function getAvatar(picture: string) {
     try {
       // return avatar on success
       return await Storage.get(picture);
-    } catch (e) {
-    }
+    } catch (e) {}
   }
   // return null else
   return undefined;

@@ -1,10 +1,9 @@
 import {createContext, useContext} from 'react';
-import {AuthType} from '../types/auth';
-
+import {AuthType, Challenge} from '../types/auth';
 
 export const Auth = createContext<AuthType>({
   user: null,
-  pending: false,
+  challenge: Challenge.pending
 });
 
 export const useAuth = () => {

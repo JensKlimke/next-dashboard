@@ -1,25 +1,30 @@
 import {WithChildren} from 'types/withChildren';
 import {useRouter} from 'next/router';
-import {useEffect} from 'react';
+import {useEffect, useMemo} from 'react';
 import {generateLoginPageUrl} from '../oauth/auth';
 import {useAuth} from 'auth/contexts/auth';
+import {Challenge} from "auth/types/auth";
 
 export function RequireAuth ({children} : WithChildren) {
   // hooks
-  const {user, pending, redirectPath} = useAuth();
+  const {user, challenge, loginUrl} = useAuth();
   const router = useRouter();
+  // get states
+  const invalid = useMemo(() => {
+    return challenge === Challenge.pending;
+  }, [challenge])
   // handle redirect
   useEffect(() => {
     // when pending abort
-    if (pending || user || !redirectPath) return;
+    if (user || !loginUrl || invalid || !router) return;
     // generate login url
-    const loginUrl = generateLoginPageUrl(redirectPath, location.toString());
+    const url = generateLoginPageUrl(loginUrl, location.toString());
     // redirect
-    router.push(loginUrl).then();
-  }, [pending, user, router, redirectPath]);
+    router.push(url).then();
+  }, [user, invalid, loginUrl, router]);
   // check pending
-  if (pending || !user)
+  if (invalid || !user)
     return <></>
-  // check user
+  // return children
   return <>{children}</>;
 }

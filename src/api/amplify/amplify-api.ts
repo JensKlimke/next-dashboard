@@ -1,8 +1,10 @@
 import {useCallback, useEffect, useState} from "react";
-import {API, Auth} from "aws-amplify";
+import {API} from "aws-amplify";
+import {useAuth} from "auth/contexts/auth";
 
 export function useAmplifyApi (api: string, path: string, parameters?: object) {
   // result
+  const auth = useAuth();
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>();
@@ -18,24 +20,22 @@ export function useAmplifyApi (api: string, path: string, parameters?: object) {
   }
   // call api
   const reload = useCallback(() => {
+    // only load with token
+    if (!auth.token)
+      return;
     // set result to null
     setLoading(true);
     setData(undefined);
     setError(undefined);
     // load resource
-    Auth.currentSession().then(session => {
-      API.get(api, path, {
-        queryStringParameters: {...parameters},
-        headers: {
-          Authorization: `Bearer ${session.getIdToken().getJwtToken()}`
-        }
-      })
-        .then(g => setData(g), e => errorHandler('err-api-1', e))
-        .catch(e => errorHandler('err-api-2', e))
-        .then(() => setLoading(false))
+    API.get(api, path, {
+      queryStringParameters: {...parameters},
+      headers: { Authorization: `Bearer ${auth.token}` }
     })
-      .catch(e => errorHandler('err-api-3', e));
-  }, [api, path, parameters]);
+      .then(g => setData(g), e => errorHandler('err-api-1', e))
+      .catch(e => errorHandler('err-api-2', e))
+      .then(() => setLoading(false))
+  }, [api, path, parameters, auth.token]);
   // load on startup
   useEffect(reload, [reload]);
   // return result

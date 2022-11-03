@@ -3,10 +3,10 @@ import {Auth} from '../contexts/auth';
 import {UserType} from '../types/user';
 import {WithChildren} from 'types/withChildren';
 import {useEffect, useState} from 'react';
-import {OAUTH_REDIRECT_PATH} from "auth/config/consts";
-import {AuthType} from "auth/types/auth";
+// import {OAUTH_REDIRECT_PATH} from "auth/config/consts";
+import {Challenge} from "auth/types/auth";
 
-const redirectPath = OAUTH_REDIRECT_PATH;
+// const redirectPath = OAUTH_REDIRECT_PATH;
 
 // functions
 const convertUser = (user: any) => new Promise<UserType>((resolve) => resolve({
@@ -48,7 +48,7 @@ export default function GithubAuthProvider ({children} : WithChildren) {
     if (user) setPending(false);
   }, [user]);
   // logout callback
-  const logout = () => {
+  const signOut = () => new Promise<void>(() => {
     // set pending
     setPending(true);
     // delete session
@@ -56,19 +56,17 @@ export default function GithubAuthProvider ({children} : WithChildren) {
     // unset user and pending
     setUser(null);
     setPending(false);
-  }
+  });
   // accessToken callback
   // TODO: also getAccessToken
-  const updateAccessToken = (token : string) => {
-    setPending(true);
-    setAccessToken(token);
-  }
-  const authContextObject : AuthType = {
+  // const updateAccessToken = (token : string) => {
+  //   setPending(true);
+  //   setAccessToken(token);
+  // }
+  const authContextObject = {
     user,
-    pending,
-    redirectPath,
-    updateAccessToken,
-    logout
+    challenge: pending ? Challenge.pending : Challenge.error, // TODO: must be updated
+    signOut
   }
   // render
   return (
