@@ -1,5 +1,5 @@
 import {ReactElement} from "react";
-import {useAmplifyApi} from "./amplify-api";
+import {useAmplifyApi} from "./amplify-api-hook";
 import GenericApiComponent from "../GenericApiComponent";
 
 
