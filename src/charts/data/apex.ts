@@ -1,5 +1,16 @@
 import moment from "moment";
-import merge from 'lodash.merge';
+
+export const merge = (target : any, source : any) => {
+  // Iterate through `source` properties and if an `Object` set property to merge of `target` and `source` properties
+  const s = {... source};
+  const t = {... target};
+  for (const key of Object.keys(s)) {
+    if (s[key] instanceof Object)
+      Object.assign(s[key], merge(t[key], s[key]))
+  }
+  Object.assign(t || {}, s)
+  return t
+}
 
 export const options = {
   chart: {
