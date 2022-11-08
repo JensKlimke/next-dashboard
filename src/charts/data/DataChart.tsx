@@ -5,7 +5,8 @@ import {ApexOptions} from "apexcharts";
 export type ConfigT = {
   groups: {
     name: string
-    filter: (e : any) => boolean
+    filter?: (e : any) => boolean
+    map?: (e : any) => any
     color: string
   }[],
   options: ApexOptions
@@ -28,10 +29,15 @@ export default function DataChart ({input, config} : {input : any[] | undefined,
     setColors(colors);
     // get groups
     const data = config.groups.map((g) => {
+      // set data
+      let d = [...input];
       // filter data and convert to point
-      const d = input
-        .filter(g.filter)
-        .map(entry => ({x: entry._time, y: entry._value}));
+      if (g.filter)
+        d = d.filter(g.filter);
+      if (g.map)
+        d = d.map(g.map);
+      // map to x and y
+      d = d.map(entry => ({x: entry._time, y: entry._value}));
       // return series
       return {name: g.name, data: d};
     });

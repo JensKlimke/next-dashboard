@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {ApexOptions} from "apexcharts";
 import {Col, Container, Placeholder, Row} from "react-bootstrap";
-import merge from 'lodash.merge';
-import {timeLineChartOptions} from "./apex";
+import {merge, timeLineChartOptions} from "./apex";
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -26,13 +25,14 @@ export default function TimeSeriesChart ({series, options}: PropsI) {
   if(!series)
     return <Placeholder4 />
   // show chart
+  // console.log(timeLineChartOptions);
   return (
     <Container fluid className='ratio ratio-16x9'>
       <Row>
         <Col>
           <Chart
             series={series}
-            options={chartOptions}
+            options={{...chartOptions}}
             height='100%'
             width='100%'
             type='line'
