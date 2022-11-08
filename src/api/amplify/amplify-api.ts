@@ -10,8 +10,6 @@ export function useAmplifyApi (api: string, path: string, parameters?: object) {
   const [error, setError] = useState<Error>();
   // set error
   const errorHandler = (source : string, err : any) => {
-    // log
-    console.error(source, err);
     // set error state
     if(typeof err === 'string')
       setError(new Error(err));
