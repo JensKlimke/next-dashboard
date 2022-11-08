@@ -93,8 +93,9 @@ tfoot {
 }
 
 .Sidebar > .Logo img {
-    margin: 1em 0 0 0;
-    height: calc(100% - 1.5em);
+    margin: 0.5em 0 0;
+    max-width: 50%;
+    height: 100%;
 }
 
 /** TOPBAR **/
