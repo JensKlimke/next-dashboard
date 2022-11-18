@@ -15,7 +15,13 @@ export const merge = (target : any, source : any) => {
 export const options = {
   chart: {
     fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-    foreColor: '#3F3F3F'
+    foreColor: '#3F3F3F',
+    animations: {
+      enabled: false
+    },
+    zoom: {
+      enabled: true,
+    },
   },
   dataLabels: {
     enabled: false
